@@ -1,0 +1,38 @@
+func GetPostHandler(w http.ResponseWriter, r *http.Request) {
+	// URLパラメータから投稿IDを取得する
+	params := mux.Vars(r)
+	postID := params["id"]
+
+	// 投稿のスライスをループして、指定された投稿IDと一致する投稿を探す
+	for _, post := range posts {
+		if post.ID == postID {
+			// 一致する投稿が見つかった場合、その投稿をJSON形式でレスポンスとして返す
+			json.NewEncoder(w).Encode(post)
+			return
+		}
+	}
+
+	// 一致する投稿が見つからなかった場合、404エラーを返す
+	w.WriteHeader(http.StatusNotFound)
+}
+
+
+params := mux.Vars(r):
+mux.Vars関数を使って、URLパラメータを取得します。ここでは、rはhttp.Requestオブジェクトであり、HTTPリクエストに含まれるパラメータを取得するために使用されます。
+
+postID := params["id"]:
+paramsマップから、キーが"id"の値を取得して、postID変数に格納します。これにより、URLパラメータから指定された投稿IDを取得できます。
+
+for _, post := range posts:
+postsスライスをループして、各投稿を順番に取得します。_は、インデックスを無視するための空白識別子です。
+
+if post.ID == postID:
+ループ内で、投稿のIDとpostID変数の値を比較して一致するかどうかをチェックします。
+
+json.NewEncoder(w).Encode(post):
+一致する投稿が見つかった場合、json.NewEncoder関数を使ってレスポンスライターwに対して投稿データをJSON形式でエンコードし、レスポンスとして返します。
+
+w.WriteHeader(http.StatusNotFound):
+一致する投稿が見つからなかった場合、w.WriteHeader関数を使ってレスポンスのステータスコードを404 (Not Found) に設定します。これにより、クライアントに対して投稿が見つからなかったことを示します。
+
+このコードは、Golangのgithub.com/gorilla/muxパッケージを使用してURLパラメータを取得し、postsスライス内で一致する投稿を検索して返す基本的な例です。コメントには各処理の目的や説明が記載されており、初心者にも理解しやすいように配慮しています。
